@@ -1,0 +1,16 @@
+---
+# You can ignore this. This is my learning code.
+- hosts: localhost
+  vars_files:
+  - /etc/ansible/vars.yaml
+  tasks:
+  - name: test1
+    debug: "{{spark_master_host}}"
+    tags: test1
+
+  - name: test2
+    debug: msg="{{ groups["cluster_hosts"] | join(",") }}"
+    tags: test2
+
+# {{ ",".join(listvar) }}
+#
