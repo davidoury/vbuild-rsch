@@ -11,7 +11,7 @@ Vagrant.configure(2) do |config|
 ACCT
 
   config.vm.define "virtualbuild" do |virtualbuild|
-    virtualbuild.vm.network "private_network", ip: "10.0.0.100", virtualbox_intnet: true, virtualbox__intnet: "intnet"
+    virtualbuild.vm.network "private_network", ip: "10.0.0.100"
     virtualbuild.vm.hostname = "virtualbuild"
     config.vm.provider :virtualbox do |vb|
       vb.customize ["modifyvm", :id, "--memory", "1024"]
@@ -24,10 +24,10 @@ ACCT
     config.vm.provider :virtualbox do |vb|
         vb.customize ["modifyvm", :id, "--memory", "4096"]
     end
-    virtualbox1.vm.network "forwarded_port", guest: 8787, host: 8787
+    virtualbox1.vm.network "forwarded_port", guest: 8787,  host:  8787
     virtualbox1.vm.network "forwarded_port", guest: 50070, host: 50070
-    virtualbox1.vm.network "forwarded_port", guest: 8080, host: 8080
-    virtualbox1.vm.network "forwarded_port", guest: 8081, host: 8081
+    virtualbox1.vm.network "forwarded_port", guest: 8080,  host: 18080
+    virtualbox1.vm.network "forwarded_port", guest: 8081,  host: 18081
   end
 
 # config.vm.define "virtualbox2" do |virtualbox2|

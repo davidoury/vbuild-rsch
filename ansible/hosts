@@ -57,7 +57,7 @@ java18_file     ="{{download_dir}}/jdk-8u51-linux-x64.tar.gz"
 java17_dir      ="/opt/jdk1.7.0_79"
 java18_dir      ="/opt/jdk1.8.0_51"
 # Spark stuff
-spark_url         ="http://psg.mtu.edu/pub/apache/spark/spark-1.4.1/spark-1.4.1-bin-cdh4.tgz"
+spark_url         ="http://apache.arvixe.com/spark/spark-1.4.1/spark-1.4.1-bin-cdh4.tgz"
 spark_file        ="spark-1.4.1-bin-cdh4.tgz"
 spark_archive     ="{{download_dir}}/{{spark_file}}"
 spark_dir         ="/opt/spark-1.4.1-bin-cdh4"

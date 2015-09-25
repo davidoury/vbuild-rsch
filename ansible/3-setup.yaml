@@ -123,11 +123,17 @@
   #         dest=/opt/Tarballs/
   #   tags: setup_spark
 
+  - name: spark_archive
+    debug: msg="{{spark_archive}}"
+    tags: test
+
   - name: unarchive spark into /opt
     unarchive: src={{spark_archive}}
                dest=/opt/
                owner=root group=root mode=0755
-    tags: setup_spark
+    tags: 
+    - test
+    - setup_spark 
 
   - name: copy spark-cassandra-connector.jar to {{spark_dir}}/lib/
     copy: src=/vagrant/spark-cassandra-connector.jar
