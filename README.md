@@ -1,5 +1,4 @@
-# vbuild-rsch
+# DIY: R, Spark, Cassandra, HDFS
 
-one
-two
-three
+These files can be used to create and configure one (or more) virtual machines (using virtualBox.)
+
