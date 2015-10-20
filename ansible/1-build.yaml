@@ -47,7 +47,8 @@
     - setup_basics
 
   - name: distribute authorization keys for non-root users (localhost)
-    shell: "ssh-copy-id -i /home/{{user}}/.ssh/id_rsa {{user}}@{{inventory_hostname}}"
+    shell: "ssh-copy-id -i /home/{{user}}/.ssh/id_rsa {{user}}@{{item}}"
+    with_items: groups['cluster_hosts']
     when: user != "root"
     tags: 
     - setup_ssh
