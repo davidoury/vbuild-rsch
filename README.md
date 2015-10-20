@@ -1,4 +1,4 @@
-# Virtual R, Spark, Cassandra and HDFS xy
+# Virtual R, Spark, Cassandra and HDFS a
 
 These files can be used to create and configure one (or more) virtual machines (using virtualBox.)
 
