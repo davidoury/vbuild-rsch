@@ -206,10 +206,26 @@ Hmmm. I can't find examples that work.
 #### SparkR shell (`sparkR`)
 
 ```r
-> df <- createDataFrame(sqlContext, faithful) 
-> df
-DataFrame[eruptions:double, waiting:double]
+> iris.DF <- createDataFrame(sqlContext, iris) 
+[warnings]
+> iris.DF
+DataFrame[Sepal_Length:double, Sepal_Width:double, Petal_Length:double, Petal_Width:double, Species:string]
+> head(iris.df, 5)
 ```
+
+```r
+registerTempTable(iris.DF, "iris.sql")
+large.iris <- sql(sqlContext, "select * from iris.sql where Sepal_Width < 3.0")
+head(large.iris)
+```
+
+```r
+> head(summarize(groupBy(iris.DF, iris.DF$Species), count = n(iris.DF$Species)))
+```
+
+
+Similar problems (to above with RStudio) reading a CSV file from HDFS or the local filesystem. 
+I'll install Spark 1.5.1 and try again. 
 
 #### SparkR sources
 
