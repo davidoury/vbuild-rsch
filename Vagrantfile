@@ -14,7 +14,7 @@ ACCT
     virtualbuild.vm.network "private_network", ip: "10.0.0.100"
     virtualbuild.vm.hostname = "virtualbuild"
     config.vm.provider :virtualbox do |vb|
-      vb.customize ["modifyvm", :id, "--memory", "1024"]
+      vb.customize ["modifyvm", :id, "--memory", "512"]
     end
   end
 
