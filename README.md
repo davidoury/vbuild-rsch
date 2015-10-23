@@ -129,26 +129,26 @@ sc: org.apache.spark.SparkContext = org.apache.spark.SparkContext@542aba71
 ```
 
 The following sends `Array(1,2,3)` to the spark cluster with the `parallelize` command and then retreives this data with the collect commnd. 
-```
+```scala
 scala> sc.parallelize(Array(1,2,3)).collect()
 res1: Array[Int] = Array(1, 2, 3)
 ```
 
 The following reads the `README.md` file from HDFS into a Spark RDD and then retrieves this data with the `collect` command.
-```
+```scala
 scala> sc.textFile("hdfs://box1/README.md").collect()
 res2: Array[String] = Array(# Apache Spark, "", Spark is a fast and general cluster computing system for Big Data. It provides, high-level APIs in Scala, Java, and Python, and [more output] ...
 ``` 
 
 Read the `city` table of the `test` keyspace from Cassandra into a Spark RDD. 
-```
+```scala
 scala> val rdd = sc.cassandraTable("test", "city")
 scala> rdd.collect()
 scala> rdd.collect().foreach(println)
 ```
 
 Insert into the `city` table of the `test` keyspace from Cassandra.
-```
+```scala
 scala> val collection = sc.parallelize(Seq(("Boston", 655884), ("Los Angeles", 3928864), ("New York", 8175133)))
 scala> collection.saveToCassandra("test", "city", SomeColumns("name", "population"))
 ```
