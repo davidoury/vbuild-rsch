@@ -78,7 +78,7 @@ $ hdfs dfs -copyFromLocal /opt/spark-1.4.1-bin-cdh4/README.md /
 $ wget https://s3-us-west-2.amazonaws.com/bentley-psap/iris.csv
 $ hdfs dfs -copyFromLocal iris.csv /
 ```
-Check that it they are there. 
+Check for them.
 ```
 $ hdfs dfs -ls / 
 Found 2 items
@@ -188,32 +188,18 @@ Sources
 
 - http://www.r-bloggers.com/spark-1-4-for-rstudio/
 
+## Python Spark shell (`pyspark`)
 
-
-The following reads the `README.md` file from HDFS into a Spark RDD and then retrieves this data with the `collect` command.
-```scala
-scala> sc.textFile("hdfs://box1/README.md").collect()
-res2: Array[String] = Array(# Apache Spark, "", Spark is a fast and general cluster computing system for Big Data. It provides, high-level APIs in Scala, Java, and Python, and [more output] ...
-``` 
-
-Read the `city` table of the `test` keyspace from Cassandra into a Spark RDD. 
-```scala
-scala> val rdd = sc.cassandraTable("test", "city")
-scala> rdd.collect()
-scala> rdd.collect().foreach(println)
+Start the shell.
+```
+$ pyspark
+[lots of output]
+SparkContext available as sc, HiveContext available as sqlContext.
 ```
 
-Insert into the `city` table of the `test` keyspace from Cassandra.
-```scala
-scala> val collection = sc.parallelize(Seq(("Boston", 655884), 
-                                           ("Los Angeles", 3928864), 
-                                           ("New York", 8175133)))
-scala> collection.saveToCassandra("test", "city", SomeColumns("name", "population"))
-```
-
-Check that these rows were inserted in the `city` table of the `test` keyspace.
-```scala
-scala> val rdd = sc.cassandraTable("test", "city")
-scala> rdd.collect().foreach(println)
+To read the `README.md` file. 
+```python
+>>> sc.textFile("hdfs://box1/README.md")
+MapPartitionsRDD[1] at textFile at NativeMethodAccessorImpl.java:-2
 ```
 
