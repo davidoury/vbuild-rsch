@@ -85,11 +85,45 @@ $ hdfs dfs -cat /README.md
 [contents of the README.md file]
 ```
 
+### Casssandra
+
+Start the Cassandra Query Language shell `cqlsh`.
+```
+$ cqlsh box1
+[cqlsh 5.0.1 | Cassandra 2.2.3 | CQL spec 3.3.1 | Native protocol v4]
+Use HELP for help.
+```
+
+Create a _keyspace_ called `test`.
+Tables created in that keyspace are not replicated as we have only a single node cluster.
+```
+cqlsh> create keyspace test with replication = {'class':'SimpleStrategy','replication_factor': 1};
+```
+
+Create the `city` table in the `test` keyspace with text variable `name` as the primary key and an integer variable `population`. 
+```
+cqlsh> create table test.city (name text primary key, population int);
+```
+
+Insert data into table `city`.
+```
+cqlsh> insert into test.city (name, population) values ('Shanghai', 24150000);
+cqlsh> insert into test.city (name, population) values ('Karachi',  23500000);
+cqlsh> insert into test.city (name, population) values ('Lagos',    21324000);
+cqlsh> insert into test.city (name, population) values ('Delhi',    16787941);
+cqlsh> insert into test.city (name, population) values ('Tianjin',  14722100);
+```
+
+Display all rows from the `city` table.
+```
+cqlsh> select * from test.city;
+```
+
 ### Spark
 
 From any account, except `root` run the following.
 ```
-spark-shell
+$ spark-shell
 [lots of output]
 sc: org.apache.spark.SparkContext = org.apache.spark.SparkContext@542aba71
 ```
@@ -104,4 +138,22 @@ The following reads the `README.md` file from HDFS into a Spark RDD and then ret
 ```
 scala> sc.textFile("hdfs://box1/README.md").collect()
 res2: Array[String] = Array(# Apache Spark, "", Spark is a fast and general cluster computing system for Big Data. It provides, high-level APIs in Scala, Java, and Python, and [more output] ...
+``` 
+
+Read the `city` table of the `test` keyspace from Cassandra into a Spark RDD. 
+```
+scala> val rdd = sc.cassandraTable("test", "city")
+scala> rdd.collect()
+scala> rdd.collect().foreach(println)
+```
+
+Insert into the `city` table of the `test` keyspace from Cassandra.
+```
+scala> val collection = sc.parallelize(Seq(("Boston", 655884), ("Los Angeles", 3928864), ("New York", 8175133)))
+scala> collection.saveToCassandra("test", "city", SomeColumns("name", "population"))
+```
+
+```
+scala> val rdd = sc.cassandraTable("test", "city")
+scala> rdd.collect().foreach(println)
 ```
