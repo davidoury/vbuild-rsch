@@ -154,13 +154,7 @@ scala> collection.saveToCassandra("test", "city", SomeColumns("name", "populatio
 ```
 
 Check that these rows were inserted in the `city` table of the `test` keyspace.
-```
+```scala
 scala> val rdd = sc.cassandraTable("test", "city")
 scala> rdd.collect().foreach(println)
-```
-
-```ruby
-require 'redcarpet'
-markdown = Redcarpet.new("Hello World!")
-puts markdown.to_html
 ```
