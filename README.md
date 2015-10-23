@@ -149,7 +149,9 @@ scala> rdd.collect().foreach(println)
 
 Insert into the `city` table of the `test` keyspace from Cassandra.
 ```scala
-scala> val collection = sc.parallelize(Seq(("Boston", 655884), ("Los Angeles", 3928864), ("New York", 8175133)))
+scala> val collection = sc.parallelize(Seq(("Boston", 655884), 
+                                           ("Los Angeles", 3928864), 
+                                           ("New York", 8175133)))
 scala> collection.saveToCassandra("test", "city", SomeColumns("name", "population"))
 ```
 
