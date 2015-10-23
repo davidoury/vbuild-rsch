@@ -1,8 +1,12 @@
-# Virtual R, Spark, Cassandra and HDFS ab
+# Virtual R, Spark, Cassandra and HDFS 
 
-These files can be used to create and configure one (or more) virtual machines (using virtualBox.)
+Vagrant, Virtualbox and Ansible are used to create a virtualbox which runs R, Spark, Cassandra and HDFS.
 
-For now see [these slides](https://docs.google.com/presentation/d/1rlSrjb9s697owHC3g0x8BnQLfpN1w-eTB-YVwfV_1dI/edit?pli=1#slide=id.p) 
-presented at the Bentley Data Lab.
+## Slides 
 
-test
+- [DIY: R, Spark, Cassandra & Hadoop](https://docs.google.com/presentation/d/1rlSrjb9s697owHC3g0x8BnQLfpN1w-eTB-YVwfV_1dI/edit?usp=sharing) --- These slides contain instructions on setting up the virtual environment. 
+
+- [Managing the Environment: R, Spark, Cassandra & Hadoop](https://docs.google.com/presentation/d/1j6clObu-HmqIfid-RrZTC-pRAZvhd7QXB4NmWbRfTC0/edit?usp=sharing)
+--- These slides contains notes on managing the environment.
+
+## Connector test
