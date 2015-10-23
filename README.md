@@ -44,6 +44,7 @@ From the `root` user load the Ansible setup files in `setup.tgz` and install Ans
 # /tmp/install.sh
 ```
 
+Material is downloaded into the `virtualbuild` virtual box. 
 ```
 # /etc/ansible/1-build.sh
 ```
@@ -54,16 +55,19 @@ Create an account to use when connecting to RStudio. Set passwords for this acco
 ```
 # /etc/ansible/2-accounts.sh
 ```
+
+All programs and packages (R, Spark, Cassandra, HDFS and others) are installed and configured 
+on the virtual box `virtualbox1`.
 ```
 # /etc/ansible/3-setup.sh
 ```
 
 ## Management
+
+All services are started.
 ```
 # /etc/ansible/4-start.sh
 ```
-
-Point your browser to `http://localhost:8787` and login to RStudio with the account created above. 
 
 ## Examples
 
@@ -100,7 +104,8 @@ Use HELP for help.
 Create a _keyspace_ called `test`.
 Tables created in that keyspace are not replicated as we have only a single node cluster.
 ```
-cqlsh> create keyspace test with replication = {'class':'SimpleStrategy','replication_factor': 1};
+cqlsh> create keyspace test with replication = {'class':'SimpleStrategy',
+                                                'replication_factor': 1};
 ```
 
 Create the `city` table in the `test` keyspace with text variable `name` as the primary key and an integer variable `population`. 
@@ -133,7 +138,8 @@ sc: org.apache.spark.SparkContext = org.apache.spark.SparkContext@542aba71
 
 The following sends `Array(1,2,3)` to the spark cluster with the `parallelize` command and then retreives this data with the collect commnd. 
 ```scala
-scala> sc.parallelize(Array(1,2,3)).collect()
+scala> val rdd = sc.parallelize(Array(1,2,3))
+scala> rdd.collect()
 res1: Array[Int] = Array(1, 2, 3)
 ```
 
@@ -141,7 +147,8 @@ res1: Array[Int] = Array(1, 2, 3)
 
 The following reads the `README.md` file from HDFS into a Spark RDD and then retrieves this data with the `collect` command.
 ```scala
-scala> sc.textFile("hdfs://box1/README.md").collect()
+scala> val rdd = sc.textFile("hdfs://box1/README.md")
+scala> rdd.collect()
 res2: Array[String] = Array(# Apache Spark, "", Spark is a fast and general cluster computing system for Big Data. It provides, high-level APIs in Scala, Java, and Python, and [more output] ...
 ``` 
 
