@@ -65,7 +65,7 @@ Create an account to use when connecting to RStudio. Set passwords for this acco
 
 Point your browser to `http://localhost:8787` and login to RStudio with the account created above. 
 
-## Service and connector tests
+## Examples
 
 ### HDFS
 Login to the `hdfs` account. 
@@ -122,7 +122,7 @@ Display all rows from the `city` table.
 cqlsh> select * from test.city;
 ```
 
-### Spark shell (`spark-shell`)
+### Scala Spark shell (`spark-shell`)
 
 From any account, except `root`, run the following.
 ```
@@ -137,11 +137,15 @@ scala> sc.parallelize(Array(1,2,3)).collect()
 res1: Array[Int] = Array(1, 2, 3)
 ```
 
+#### Built-in HDFS support
+
 The following reads the `README.md` file from HDFS into a Spark RDD and then retrieves this data with the `collect` command.
 ```scala
 scala> sc.textFile("hdfs://box1/README.md").collect()
 res2: Array[String] = Array(# Apache Spark, "", Spark is a fast and general cluster computing system for Big Data. It provides, high-level APIs in Scala, Java, and Python, and [more output] ...
 ``` 
+
+#### spark-cassandra-connector
 
 Read the `city` table of the `test` keyspace from Cassandra into a Spark RDD. 
 ```scala
@@ -164,7 +168,21 @@ scala> val rdd = sc.cassandraTable("test", "city")
 scala> rdd.collect().foreach(println)
 ```
 
-### SparkR and RStudio 
+#### Sources
+
+- `https://github.com/datastax/spark-cassandra-connector`.
+
+### Spark and R
+
+Spark can be called from R in two ways: 
+
+1. From RStudio
+1. From the `sparkR` shell
+
+Below are sections for both. 
+The RStudio examples seem to be more problematic. 
+
+#### SparkR from RStudio 
 
 Go to `http://localhost:8787` with a browser. 
 In the console you should see
@@ -183,12 +201,23 @@ From the R console run
 > sqlContext <- sparkRSQL.init(sc) 
 ```
 
+Hmmm. I can't find examples that work. 
 
-Sources
+#### SparkR shell (`sparkR`)
 
+```r
+> df <- createDataFrame(sqlContext, faithful) 
+> df
+DataFrame[eruptions:double, waiting:double]
+```
+
+#### Sources
+
+- https://spark.apache.org/docs/1.4.1/sparkr.html
+- https://spark.apache.org/docs/1.4.1/programming-guide.html
 - http://www.r-bloggers.com/spark-1-4-for-rstudio/
 
-## Python Spark shell (`pyspark`)
+### Python Spark shell (`pyspark`)
 
 Start the shell.
 ```
@@ -197,9 +226,35 @@ $ pyspark
 SparkContext available as sc, HiveContext available as sqlContext.
 ```
 
-To read the `README.md` file. 
+Send the sequence `[1, 2, 3, 4, 5]` to Spark to store in an RDD. 
 ```python
->>> sc.textFile("hdfs://box1/README.md")
+>>> data = [1, 2, 3, 4, 5]
+>>> distData = sc.parallelize(data)
+>>> data
+>>> distData
+```
+
+Retreive the first 3 values. 
+```python
+>>> distData.take(3)
+[1, 2, 3]
+```
+
+#### HDFS
+
+To read the `README.md` file from HDFS. 
+```python
+>>> rdd = sc.textFile("hdfs://box1/README.md")
+>>> rdd
 MapPartitionsRDD[1] at textFile at NativeMethodAccessorImpl.java:-2
 ```
+
+Retreive the first five rows.
+```python
+>>> rdd.take(5)
+```
+
+#### Sources
+
+- https://spark.apache.org/docs/1.4.1/programming-guide.html
 
