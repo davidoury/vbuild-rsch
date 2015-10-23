@@ -72,15 +72,18 @@ Login to the `hdfs` account.
 ```
 $ su -l hdfs
 ```
-Copy a file into HDFS.
+Copy a couple files into HDFS.
 ```
 $ hdfs dfs -copyFromLocal /opt/spark-1.4.1-bin-cdh4/README.md /
+$ wget https://s3-us-west-2.amazonaws.com/bentley-psap/iris.csv
+$ hdfs dfs -copyFromLocal iris.csv /
 ```
-Check that it is there. 
+Check that it they are there. 
 ```
 $ hdfs dfs -ls / 
-Found 1 items
+Found 2 items
 -rw-r--r--   3 hdfs hadoop       3624 2015-10-23 13:34 /README.md
+-rw-r--r--   3 hdfs hadoop       4821 2015-10-23 15:19 /iris.csv
 $ hdfs dfs -cat /README.md
 [contents of the README.md file]
 ```
@@ -119,9 +122,9 @@ Display all rows from the `city` table.
 cqlsh> select * from test.city;
 ```
 
-### Spark
+### Spark shell (`spark-shell`)
 
-From any account, except `root` run the following.
+From any account, except `root`, run the following.
 ```
 $ spark-shell
 [lots of output]
@@ -160,3 +163,57 @@ Check that these rows were inserted in the `city` table of the `test` keyspace.
 scala> val rdd = sc.cassandraTable("test", "city")
 scala> rdd.collect().foreach(println)
 ```
+
+### SparkR and RStudio 
+
+Go to `http://localhost:8787` with a browser. 
+In the console you should see
+```
+Attaching package: ‘SparkR’
+
+The following objects are masked from ‘package:base’:
+
+    intersect, sample, table
+
+Launching java with spark-submit command /opt/spark-1.4.1-bin-cdh4/bin/spark-submit   sparkr-shell /tmp/Rtmp11GIa5/backend_port4efc7c062a86 
+```
+
+From the R console run 
+```
+> sqlContext <- sparkRSQL.init(sc) 
+```
+
+
+Sources
+
+- http://www.r-bloggers.com/spark-1-4-for-rstudio/
+
+
+
+The following reads the `README.md` file from HDFS into a Spark RDD and then retrieves this data with the `collect` command.
+```scala
+scala> sc.textFile("hdfs://box1/README.md").collect()
+res2: Array[String] = Array(# Apache Spark, "", Spark is a fast and general cluster computing system for Big Data. It provides, high-level APIs in Scala, Java, and Python, and [more output] ...
+``` 
+
+Read the `city` table of the `test` keyspace from Cassandra into a Spark RDD. 
+```scala
+scala> val rdd = sc.cassandraTable("test", "city")
+scala> rdd.collect()
+scala> rdd.collect().foreach(println)
+```
+
+Insert into the `city` table of the `test` keyspace from Cassandra.
+```scala
+scala> val collection = sc.parallelize(Seq(("Boston", 655884), 
+                                           ("Los Angeles", 3928864), 
+                                           ("New York", 8175133)))
+scala> collection.saveToCassandra("test", "city", SomeColumns("name", "population"))
+```
+
+Check that these rows were inserted in the `city` table of the `test` keyspace.
+```scala
+scala> val rdd = sc.cassandraTable("test", "city")
+scala> rdd.collect().foreach(println)
+```
+
