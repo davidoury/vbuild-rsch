@@ -168,7 +168,7 @@ scala> val rdd = sc.cassandraTable("test", "city")
 scala> rdd.collect().foreach(println)
 ```
 
-#### Sources
+#### Spark-cassandra-connector URL
 
 - `https://github.com/datastax/spark-cassandra-connector`.
 
@@ -211,7 +211,7 @@ Hmmm. I can't find examples that work.
 DataFrame[eruptions:double, waiting:double]
 ```
 
-#### Sources
+#### SparkR sources
 
 - https://spark.apache.org/docs/1.4.1/sparkr.html
 - https://spark.apache.org/docs/1.4.1/programming-guide.html
@@ -254,7 +254,7 @@ Retreive the first five rows.
 >>> rdd.take(5)
 ```
 
-#### Sources
+#### Python sources
 
 - https://spark.apache.org/docs/1.4.1/programming-guide.html
 
