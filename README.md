@@ -127,6 +127,13 @@ Display all rows from the `city` table.
 cqlsh> select * from test.city;
 ```
 
+#### Cassandra documentation
+
+This environment runs Cassandra 2.2.3 from the [Datastax community edition](http://www.planetcassandra.org/cassandra/). 
+
+- [DataStax Cassandra 2.2](http://docs.datastax.com/en/cassandra/2.2/cassandra/cassandraAbout.html) 
+- [CQL for Cassandra 2.2](http://docs.datastax.com/en/cql/3.3/cql/cqlIntro.html) --- Documentation on using the Cassandra Query Language (CQL) and the CQL shell (`cqlsh`).
+
 ### Scala Spark shell (`spark-shell`)
 
 From any account, except `root`, run the following.
@@ -152,7 +159,16 @@ scala> rdd.collect()
 res2: Array[String] = Array(# Apache Spark, "", Spark is a fast and general cluster computing system for Big Data. It provides, high-level APIs in Scala, Java, and Python, and [more output] ...
 ``` 
 
-#### spark-cassandra-connector
+#### Spark Cassandra Connector
+
+The Spark Cassandra connector is a library which allows the use of Cassandra from Spark.
+The library and documention on its use are available on GitHub at
+
+- https://github.com/datastax/spark-cassandra-connector
+
+It is installed in this environment and so doesn't require additional configuration.
+Functions are added to the spark context object `sc` made available in the Spark shells below (`spark-shell`, `sparkR`, `pyspark`) to connect to (read from, write to) a Cassandra database. 
+The example below assumes that you have created and inserted rows into the `city` table in the [Cassandra](#casssandra) section.
 
 Read the `city` table of the `test` keyspace from Cassandra into a Spark RDD. 
 ```scala
@@ -175,10 +191,6 @@ scala> val rdd = sc.cassandraTable("test", "city")
 scala> rdd.collect().foreach(println)
 ```
 
-#### Spark-cassandra-connector URL
-
-- `https://github.com/datastax/spark-cassandra-connector`.
-
 ### Spark and R
 
 Spark can be called from R in two ways: 
@@ -191,7 +203,7 @@ The RStudio examples seem to be more problematic.
 
 #### SparkR from RStudio 
 
-Go to `http://localhost:8787` with a browser. 
+Go to http://localhost:8787 with a browser. 
 In the console you should see
 ```
 Attaching package: ‘SparkR’
@@ -208,7 +220,7 @@ From the R console run
 > sqlContext <- sparkRSQL.init(sc) 
 ```
 
-Hmmm. I can't find examples that work. 
+[I'll update this as I learn more.]
 
 #### SparkR shell (`sparkR`)
 
@@ -217,7 +229,7 @@ Hmmm. I can't find examples that work.
 [warnings]
 > iris.DF
 DataFrame[Sepal_Length:double, Sepal_Width:double, Petal_Length:double, Petal_Width:double, Species:string]
-> head(iris.df, 5)
+> head(iris.DF, 5)
 ```
 
 ```r
@@ -236,8 +248,8 @@ I'll install Spark 1.5.1 and try again.
 
 #### SparkR sources
 
-- https://spark.apache.org/docs/1.4.1/sparkr.html
-- https://spark.apache.org/docs/1.4.1/programming-guide.html
+- http://spark.apache.org/docs/1.4.1/sparkr.html
+- http://spark.apache.org/docs/1.4.1/programming-guide.html
 - http://www.r-bloggers.com/spark-1-4-for-rstudio/
 
 ### Python Spark shell (`pyspark`)
@@ -272,12 +284,12 @@ To read the `README.md` file from HDFS.
 MapPartitionsRDD[1] at textFile at NativeMethodAccessorImpl.java:-2
 ```
 
-Retreive the first five rows.
+Retrieve the first five rows.
 ```python
 >>> rdd.take(5)
 ```
 
 #### Python sources
 
-- https://spark.apache.org/docs/1.4.1/programming-guide.html
+- http://spark.apache.org/docs/1.4.1/programming-guide.html
 
