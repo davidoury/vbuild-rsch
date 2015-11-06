@@ -8,6 +8,9 @@ Table of contents:
 - [Memory settings and requirements](#memory-settings-and-requirements)
 - [Setup](#setup)
 - [Management](#management)
+    - [From the virtual build machine](#from-the-virtual-build-machine)
+    - [From the virtual cluster machines](#from-the-virtual-cluster-machines)
+
 - [Examples](#examples)
 
 
@@ -74,36 +77,99 @@ on the virtual box `virtualbox1`.
 
 ## Management
 
-All services are started with:
-```
-# /etc/ansible/4-start.sh
-```
-
-All services are stopped with:
-```
-# /etc/ansible/4-stop.sh
-```
-Shutting down the machines from the VirtualBox GUI or from the command line with
+All virtual machines can be shutdown from the VirtualBox GUI or 
+from the command line with
 ```
 $ cd vbuild-rsch
 $ vagrant halt
 ```
-will also stop the services. In addition, the memory reserved by the virtual machines will be returned when the machines are shut down from the VirtualBox GUI or by using the two commands above. 
 
-To stop and start Cassandra: 
+The memory reserved by the virtual machines will be returned when the machines are shut down with these commands.
+
+### From the virtual build machine
+
+The virtual machine `virtualbuild` is the _virtual build machine_.
+To connect to `virtualbuild` from the command shell on your laptop 
+run the commands
+```
+cd vbuild-rsch
+vagrant ssh virtualbuild
 ```
 
+To start and stop all of the Spark, Cassandra and HDFS services 
+use the commands: 
+```
+# /etc/ansible/4-start.sh
+# /etc/ansible/4-stop.sh
 ```
 
-To stop and start Spark: 
+### From the virtual cluster machines 
+
+A _virtual cluster machine_ is a machine that runs any of the
+Spark, Cassandra or HDFS services.
+The virtual machine `virtualbox1` is the only such machine 
+in the default configuration. 
+To connect to `virtualbox1` from the command shell on your laptop 
+run the commands
+```
+cd vbuild-rsch
+vagrant ssh virtualbox1
+```
+Once connected  you will be running a shell from the `vagrant` user account 
+and the command prompt will look like 
+```
+[vagrant@box1 ~]$
 ```
 
+Each of the commands in this section should be run by the `root` account. 
+From the `vagrant` account run the following command to run a shell 
+in the `root` account (from which you can run these commands.)
+```
+$ sudo bash
+```
+Notice that the command prompt ends with a `#`. 
+This indicates that the shell is run by the `root` account. 
+
+To start and stop Cassandra use the commands:
+```
+# service cassandra start
+# service cassandra stop
 ```
 
-To stop and start HDFS: 
+Cassandra log files can be viewed with the commands:
+```
+# less /var/log/cassandra/system.log
+# less /var/log/cassandra/cassandra.log
 ```
 
+To start and stop the Spark master: 
 ```
+# $SPARK_HOME/sbin/start-master.sh 
+# $SPARK_HOME/sbin/stop-master.sh 
+```
+
+To start and stop Spark workers: 
+```
+# $SPARK_HOME/sbin/start-slave.sh spark://box1.cluster.bentley.edu:7077
+# $SPARK_HOME/sbin/stop-slave.sh 
+```
+
+To stop and start the HDFS name node: 
+```
+# service hadoop-hdfs-namenode start
+# service hadoop-hdfs-namenode stop
+```
+
+To stop and start a HDFS data node: 
+```
+# service hadoop-hdfs-datanode start
+# service hadoop-hdfs-datanode stop
+```
+
+### Memory configuration
+
+- Cassandra
+- Spark
 
 ## Examples
 
