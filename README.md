@@ -45,7 +45,7 @@ From a Git Shell on Windows or from a Terminal shell on Mac.
 $ git clone https://github.com/davidoury/vbuild-rsch.git
 $ cd vbuild-rsch
 $ vagrant up
-$ vagrant ssh virtualbulid
+$ vagrant ssh virtualbuild
 ```
 
 You are now logged into the virtual machine `virtualbuild`. Run the `bash` shell as the `root` user. 
