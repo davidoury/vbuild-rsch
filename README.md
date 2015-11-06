@@ -10,8 +10,11 @@ Table of contents:
 - [Management](#management)
     - [From the virtual build machine](#from-the-virtual-build-machine)
     - [From the virtual cluster machines](#from-the-virtual-cluster-machines)
-
 - [Examples](#examples)
+    - [HDFS](#hdfs)
+    - [Cassandra](#cassandra)
+    - [Scala Spark shell](#scala-spark-shell)
+    - [Python Spark shell](#python-spark-shell)
 
 
 
@@ -242,9 +245,10 @@ This environment runs Cassandra 2.2.3 from the [Datastax community edition](http
 - [DataStax Cassandra 2.2](http://docs.datastax.com/en/cassandra/2.2/cassandra/cassandraAbout.html) 
 - [CQL for Cassandra 2.2](http://docs.datastax.com/en/cql/3.3/cql/cqlIntro.html) --- Documentation on using the Cassandra Query Language (CQL) and the CQL shell (`cqlsh`).
 
-### Scala Spark shell (`spark-shell`)
+### Scala Spark shell 
 
-From any account, except `root`, run the following.
+Start the Spark shell `spark-shell`,
+from any account except `root`.
 ```
 $ spark-shell
 [lots of output]
@@ -361,9 +365,9 @@ I'll install Spark 1.5.1 and try again.
 - http://spark.apache.org/docs/1.4.1/programming-guide.html
 - http://www.r-bloggers.com/spark-1-4-for-rstudio/
 
-### Python Spark shell (`pyspark`)
+### Python Spark shell 
 
-Start the shell.
+Start `pyspark` shell. 
 ```
 $ pyspark --master spark://box1.cluster.bentley.edu:7077 
 [lots of output]
@@ -384,21 +388,28 @@ Retreive the first 3 values.
 [1, 2, 3]
 ```
 
-Read text files from HDFS.
-```
->>> distFile = sc.textFile("hdfs://box1.cluster.bentley.edu/iris.csv")
->>> distFile.collect()
->>> distFile.first()
-```
-
-Read text files from the local file system.
+Read a text file from the local file system.
 ```
 >>> distFile = sc.textFile("file:///etc/hosts")
 >>> distFile.collect()
 >>> distFile.first()
 ```
 
-#### HDFS
+Read a text file from HDFS.
+```
+>>> distFile = sc.textFile("hdfs://box1.cluster.bentley.edu/README.md")
+>>> distFile.collect()
+>>> distFile.first()
+```
+
+A sample map-reduce program.
+```
+>>> distFile.map(lambda aline: len(aline))
+>>> distFile.map(lambda aline: len(aline)).collect()
+>>> distFile.map(lambda aline: len(aline)).reduce(lambda a, b: a+b)
+```
+
+#### HDFS examples
 
 To read the `README.md` file from HDFS. 
 ```python
