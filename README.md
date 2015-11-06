@@ -2,6 +2,16 @@
 
 Vagrant, Virtualbox and Ansible are used to create a virtualbox which runs R, Spark, Cassandra and HDFS.
 
+Table of contents: 
+
+- [Slides](#slides)
+- [Memory settings and requirements](#memory-settings-and-requirements)
+- [Setup](#setup)
+- [Management](#management)
+- [Examples](#examples)
+
+
+
 ## Slides 
 
 - [DIY: R, Spark, Cassandra & Hadoop](https://docs.google.com/presentation/d/1rlSrjb9s697owHC3g0x8BnQLfpN1w-eTB-YVwfV_1dI/edit?usp=sharing) --- Instructions on setting up the virtual environment. 
@@ -64,9 +74,35 @@ on the virtual box `virtualbox1`.
 
 ## Management
 
-All services are started.
+All services are started with:
 ```
 # /etc/ansible/4-start.sh
+```
+
+All services are stopped with:
+```
+# /etc/ansible/4-stop.sh
+```
+Shutting down the machines from the VirtualBox GUI or from the command line with
+```
+$ cd vbuild-rsch
+$ vagrant halt
+```
+will also stop the services. In addition, the memory reserved by the virtual machines will be returned when the machines are shut down from the VirtualBox GUI or by using the two commands above. 
+
+To stop and start Cassandra: 
+```
+
+```
+
+To stop and start Spark: 
+```
+
+```
+
+To stop and start HDFS: 
+```
+
 ```
 
 ## Examples
@@ -248,6 +284,7 @@ I'll install Spark 1.5.1 and try again.
 
 #### SparkR sources
 
+- https://spark.apache.org/releases/spark-release-1-4-1.html
 - http://spark.apache.org/docs/1.4.1/sparkr.html
 - http://spark.apache.org/docs/1.4.1/programming-guide.html
 - http://www.r-bloggers.com/spark-1-4-for-rstudio/
@@ -293,3 +330,11 @@ Retrieve the first five rows.
 
 - http://spark.apache.org/docs/1.4.1/programming-guide.html
 
+
+## [in progress stuff]
+
+- [linux tutorial](http://www.ee.surrey.ac.uk/Teaching/Unix/unix1.html)
+
+## test
+
+- asdfasdf asdf 
