@@ -86,6 +86,9 @@ $ vagrant halt
 
 The memory reserved by the virtual machines will be returned when the machines are shut down with these commands.
 
+HDFS is setup to start when `virtualbox1` starts. 
+Cassandra and Spark need to be started manually. 
+
 ### From the virtual build machine
 
 The virtual machine `virtualbuild` is the _virtual build machine_.
@@ -166,10 +169,13 @@ To stop and start a HDFS data node:
 # service hadoop-hdfs-datanode stop
 ```
 
-### Memory configuration
+## Configuration
 
-- Cassandra
-- Spark
+### Spark configuration
+
+### Cassandra configuration
+
+### HDFS configuration
 
 ## Examples
 
@@ -359,7 +365,7 @@ I'll install Spark 1.5.1 and try again.
 
 Start the shell.
 ```
-$ pyspark
+$ pyspark --master spark://box1.cluster.bentley.edu:7077 
 [lots of output]
 SparkContext available as sc, HiveContext available as sqlContext.
 ```
@@ -376,6 +382,20 @@ Retreive the first 3 values.
 ```python
 >>> distData.take(3)
 [1, 2, 3]
+```
+
+Read text files from HDFS.
+```
+>>> distFile = sc.textFile("hdfs://box1.cluster.bentley.edu/iris.csv")
+>>> distFile.collect()
+>>> distFile.first()
+```
+
+Read text files from the local file system.
+```
+>>> distFile = sc.textFile("file:///etc/hosts")
+>>> distFile.collect()
+>>> distFile.first()
 ```
 
 #### HDFS
