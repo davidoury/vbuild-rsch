@@ -37,6 +37,15 @@ Table of contents:
     - Open the VirtualBox GUI, select `virtualbox1`, click `Settings`, `System`
     - Then change the `Base Memory` settings
     - `vagrant up virtualbox11` from your shell
+    
+## Download and install programs
+
+Download and install the following three programs for Windows and the first two for Mac. 
+
+1. VirtualBox https://www.virtualbox.org/wiki/Downloads
+1. Vagrant https://www.vagrantup.com/downloads.html
+1. GitHub Desktop (Windows only) https://desktop.github.com
+
 
 ## Setup
 
@@ -44,11 +53,33 @@ From a Git Shell on Windows or from a Terminal shell on Mac.
 ```
 $ git clone https://github.com/davidoury/vbuild-rsch.git
 $ cd vbuild-rsch
+```
+
+Configuration details for the creation of the virtual boxes are
+contained in file `Vagrantfile` in the `vbuild-rsch` directory. 
+By default the virtual machine `virtualbox1` is created, 
+with the following command, to use 4GB of RAM from the host machine.
+```
+vb.customize ["modifyvm", :id, "--memory", "4096"]
+```
+If you machine has a total of 4GB of RAM then replace the line
+above with the line below in file `Vagrantfile`. 
+```
+vb.customize ["modifyvm", :id, "--memory", "2048"]
+```
+
+Type the following to create both virtual boxes `virtualbuild` and `virtualbox1`.
+```
 $ vagrant up
+```
+
+Type the following to login (using SSH) to `virtualbuild`.
+```
 $ vagrant ssh virtualbuild
 ```
 
-You are now logged into the virtual machine `virtualbuild`. Run the `bash` shell as the `root` user. 
+You are now logged into the virtual machine `virtualbuild`. 
+Run the `bash` shell as the `root` user. 
 ```
 $ sudo bash
 ```

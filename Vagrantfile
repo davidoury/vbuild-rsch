@@ -22,7 +22,7 @@ ACCT
     virtualbox1.vm.network "private_network", ip: "10.0.0.101"
     virtualbox1.vm.hostname = "virtualbox1"
     config.vm.provider :virtualbox do |vb|
-        vb.customize ["modifyvm", :id, "--memory", "2048"]
+        vb.customize ["modifyvm", :id, "--memory", "4096"]
     end
     virtualbox1.vm.network "forwarded_port", guest: 8787,  host:  8787
     virtualbox1.vm.network "forwarded_port", guest: 50070, host: 50070
