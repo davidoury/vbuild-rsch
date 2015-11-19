@@ -16,7 +16,9 @@ Table of contents:
     - [Scala Spark shell](#scala-spark-shell)
     - [Python Spark shell](#python-spark-shell)
 
+## Important!
 
+The environment currently loads Spark version of 1.5.2 which has broken the spark-cassandra connector. I'll be working on that and hoping to learn how to uses branches in Git. 
 
 ## Slides 
 
@@ -44,8 +46,8 @@ Download and install the following three programs for Windows and the first two 
 
 1. VirtualBox https://www.virtualbox.org/wiki/Downloads
 1. Vagrant https://www.vagrantup.com/downloads.html
-1. GitHub Desktop (Windows only) https://desktop.github.com
-
+1. GitHub Desktop (Windows only) https://desktop.github.com. 
+   After installation the application will start. Exit the application. 
 
 ## Setup
 
