@@ -18,7 +18,7 @@ Table of contents:
 
 ## Important!
 
-The environment currently loads Spark version of 1.5.2 which has broken the spark-cassandra connector. I'll be working on that and hoping to learn how to uses branches in Git. 
+The environment currently loads Spark version of 1.5.2 which has broken the spark-cassandra connector. I'll be working on that and am hoping to learn how to uses branches in Git :)
 
 ## Slides 
 
