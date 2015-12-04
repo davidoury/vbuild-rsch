@@ -4,10 +4,11 @@ Vagrant, Virtualbox and Ansible are used to create a virtualbox which runs R, Sp
 
 Table of contents: 
 
-- [Slides](#slides)
+- [Introduction](#introduction)
 - [Memory settings and requirements](#memory-settings-and-requirements)
-- [Setup](#setup)
-- [Management](#management)
+- [Download and install programs]*(#download-and-install-programs)
+- [Create the cluster](#create-the-cluster)
+- [Cluster management](#cluster-management)
     - [From the virtual build machine](#from-the-virtual-build-machine)
     - [From the virtual cluster machines](#from-the-virtual-cluster-machines)
 - [Examples](#examples)
@@ -15,63 +16,119 @@ Table of contents:
     - [Cassandra](#cassandra)
     - [Scala Spark shell](#scala-spark-shell)
     - [Python Spark shell](#python-spark-shell)
+- [Slides](#slides)
+    
+## Introduction 
 
-## Important!
+The project creates a Spark, Cassandra and HDFS cluster (single node or multinode) 
+using VirtualBox, Vagrant and Ansible:
 
-The environment currently loads Spark version of 1.5.2 which has broken the spark-cassandra connector. I'll be working on that and am hoping to learn how to uses branches in Git :)
+- VirtualBox --- runs the virtual machines
+- Vagrant --- creates, configures, starts, stops, and destroys the virtual machines
+- Ansible --- configures and manages the cluster 
 
-## Slides 
+By default two virtual machines are created:
 
-- [DIY: R, Spark, Cassandra & Hadoop](https://docs.google.com/presentation/d/1rlSrjb9s697owHC3g0x8BnQLfpN1w-eTB-YVwfV_1dI/edit?usp=sharing) --- Instructions on setting up the virtual environment. 
+- `virtualbuild` --- used to collect the archives (Java, Spark) 
+  and repositories (Casssandra, HDFS)
+- `virtualbox1` --- becomes the single node cluster and runs the services (Spark, Cassandra, HDFS)
 
-- [Managing the Environment: R, Spark, Cassandra & Hadoop](https://docs.google.com/presentation/d/1j6clObu-HmqIfid-RrZTC-pRAZvhd7QXB4NmWbRfTC0/edit?usp=sharing)
---- Notes on managing the environment.
+The creation of the cluster is accomplished by:
+
+1. Creating the two virtual boxes 
+1. Loading Ansible onto `virtualbox1`
+1. Running Ansible from `virtualbox1` to configure the cluster on `virtualbox1`
+
+The project files consist of 
+
+- `Vagrantfile` --- a Vagrant configuration file which sets 
+  the `root` account password and IP address of each virtual machine 
+  and forwards ports so that the service monitoring web pages are 
+  accessible with a web browser 
+- `setup.tgz` --- an archive 
+  containing Ansible configuration files (`hosts` and  `*.yaml`) and scripts (`*.sh`)
+  and containing the `install.sh` script, which installs Ansible and 
+  copies these files to `/etc/ansible/`.
+    - The `hosts` file lists the IP addresses 
+    of the virtual machines, URLs of archives and directory names, 
+    and specifies roles in the cluster for each virtual machine 
+    (Spark master, HDFS name node, etc.)
+    - The `*.yaml` files contain the Ansible code to configure the cluster
+    - The `*.sh` scripts contain the ansible commands for each of four stages 
+      in the build process used to create the cluster
+      (see Section [Creating the cluster](#creating-the-cluster) below)
+  
+The Spark cluster can be accessed through 
+
+- the R `sparkR` interpreter 
+- the Python `pyspark` interpreter
+- the Scala `spark-shell` interpreter 
+- Scala and Java programs
+
+The Cassandra cluster can be accessed through the Cassandra Query Language shell `cqlsh`. 
+HDFS can be accessed from the `hdfs` account using HDFS linux commands.
+See Section [Examples](#examples) below for 
+just a few basic examples to get started with each. 
+
+The steps to create this environment are listed in the next three sections:
+
+- [Memory settings and requirements](#memory-settings-and-requirements)
+- [Download and install programs](#download-and-install-programs)
+- [Create the cluster](#create-the-cluster)
+
+We have had success with Mac OS X, Windows 7, Windows 8 and CentOS 7. 
+Windows 10 has problems that I suspect are related to its firewall settings. 
+Please send feedback about using this code to doury@bentley.edu (David Oury.)
+
+The [Examples](examples) section
 
 ## Memory settings and requirements
 
-- Your computer needs at least 4GB of RAM, but 8GB is helpful. 
-- Memory settings for `virtualbuild` are set to 512MB and for `virtualbox1` are set to 2GB. 
-- If you have 8GB of memory then the settings for `virtualbox1` could be increased to 4GB. 
-  To do make this change before you create the virtual boxes with the `vagrant up` command, 
-  then change `2048` on approximately line 25 of `Vagrantfile` to `4096`.
-- To modify these memory settings after you have created your virtual boxes
-    - `vagrant halt virtualbox1` from your shell
-    - Open the VirtualBox GUI, select `virtualbox1`, click `Settings`, `System`
-    - Then change the `Base Memory` settings
-    - `vagrant up virtualbox11` from your shell
+To run this environment your computer needs at least 4GB of RAM, but 8GB is helpful. 
+Memory allocation for `virtualbuild` is set to 512MB and for `virtualbox1` is set to 4GB. 
+If you have less than 8GB of memory then the settings for `virtualbox1` should 
+be decreased to 2GB. 
+To make this change before you create the virtual 
+boxes with the `vagrant up` command,  then change `4096` 
+on approximately line 25 of the file `Vagrantfile` in the `vbuild-rsch` directory, 
+which should look like this
+```
+vb.customize ["modifyvm", :id, "--memory", "4096"]
+```
+to this
+```
+vb.customize ["modifyvm", :id, "--memory", "2048"]
+```
+
+To modify these memory settings after you have created your virtual boxes:
+
+  - `vagrant halt virtualbox1` from your shell
+  - Open the VirtualBox GUI, select `virtualbox1`, click `Settings`, `System`
+  - Then change the `Base Memory` settings
+  - `vagrant up virtualbox11` from your shell
     
 ## Download and install programs
 
-Download and install the following three programs for Windows and the first two for Mac. 
+First, download and install the following three programs for Windows and the first two for Mac. 
 
 1. VirtualBox https://www.virtualbox.org/wiki/Downloads
 1. Vagrant https://www.vagrantup.com/downloads.html
 1. GitHub Desktop (Windows only) https://desktop.github.com. 
    After installation the application will start. Exit the application. 
 
-## Setup
+## Create the cluster
 
-From a Git Shell on Windows or from a Terminal shell on Mac.
+Type the following commands from a Git Shell on Windows or from a Terminal shell on Mac.
 ```
 $ git clone https://github.com/davidoury/vbuild-rsch.git
-$ cd vbuild-rsch
 ```
+This Git command created a subdirectory `vbuild-rsch` containing the files to use in 
+building the environment. 
 
-Configuration details for the creation of the virtual boxes are
-contained in file `Vagrantfile` in the `vbuild-rsch` directory. 
-By default the virtual machine `virtualbox1` is created, 
-with the following command, to use 4GB of RAM from the host machine.
-```
-vb.customize ["modifyvm", :id, "--memory", "4096"]
-```
-If you machine has a total of 4GB of RAM then replace the line
-above with the line below in file `Vagrantfile`. 
-```
-vb.customize ["modifyvm", :id, "--memory", "2048"]
-```
-
+All Vagrant commands must be run from this subdirectory. 
 Type the following to create both virtual boxes `virtualbuild` and `virtualbox1`.
 ```
+$ cd vbuild-rsch
 $ vagrant up
 ```
 
@@ -93,25 +150,37 @@ From the `root` user load the Ansible setup files in `setup.tgz` and install Ans
 # /tmp/install.sh
 ```
 
-Material is downloaded into the `virtualbuild` virtual box. 
+Materials (archives and pepositories) are downloaded into the `virtualbuild` virtual box
+using the following command. 
 ```
 # /etc/ansible/1-build.sh
 ```
 Answer `yes` when prompted with `(yes/no)?` <br>
 Answer `hello` when prompted with `password:`
 
-Create an account to use when connecting to RStudio. Set passwords for this account and for the `hadoop` and `hdfs` accounts. 
+This script creates an account (of your choosing) to use when connecting to RStudio 
+and sets passwords (of your choosing) for this account and for the `hadoop` and `hdfs` accounts. 
 ```
 # /etc/ansible/2-accounts.sh
 ```
 
-All programs and packages (R, Spark, Cassandra, HDFS and others) are installed and configured 
-on the virtual box `virtualbox1`.
+This script installs and configures all programs and packages 
+(R, Spark, Cassandra, HDFS and others) on the virtual box `virtualbox1`.
 ```
 # /etc/ansible/3-setup.sh
 ```
 
-## Management
+To start all services (RStudio, Spark, Cassandra and HDFS)
+run the following command.
+```
+# /etc/ansible/4-start.sh
+```
+
+The following section describes the commands to 
+stop and start the virtual machines 
+and to stop and start individual services. 
+
+## Cluster management
 
 All virtual machines can be shutdown from the VirtualBox GUI or 
 from the command line with
@@ -120,7 +189,9 @@ $ cd vbuild-rsch
 $ vagrant halt
 ```
 
-The memory reserved by the virtual machines will be returned when the machines are shut down with these commands.
+The memory reserved by the virtual machines will 
+be returned to the host OS when thes machines are 
+shut down with these commands.
 
 HDFS is setup to start when `virtualbox1` starts. 
 Cassandra and Spark need to be started manually. 
@@ -205,6 +276,14 @@ To stop and start a HDFS data node:
 # service hadoop-hdfs-datanode stop
 ```
 
+## Starting over
+
+```
+cd vbuild-rsch
+vagrant destroy -f
+cd ..
+```
+
 ## Configuration
 
 ### Spark configuration
@@ -222,7 +301,8 @@ $ su -l hdfs
 ```
 Copy a couple files into HDFS.
 ```
-$ hdfs dfs -copyFromLocal /opt/spark-1.4.1-bin-cdh4/README.md /
+$ hdfs dfs -copyFromLocal /opt/spark-1.5.2-bin-cdh4/README.md /
+
 $ wget https://s3-us-west-2.amazonaws.com/bentley-psap/iris.csv
 $ hdfs dfs -copyFromLocal iris.csv /
 ```
@@ -465,6 +545,12 @@ Retrieve the first five rows.
 
 - [linux tutorial](http://www.ee.surrey.ac.uk/Teaching/Unix/unix1.html)
 
-## test
+## Slides 
 
-- asdfasdf asdf 
+These two slide decks contained the original two presentations for the project. 
+The information there is being migrated here.
+
+- [DIY: R, Spark, Cassandra & Hadoop](https://docs.google.com/presentation/d/1rlSrjb9s697owHC3g0x8BnQLfpN1w-eTB-YVwfV_1dI/edit?usp=sharing) --- Instructions on setting up the virtual environment. 
+
+- [Managing the Environment: R, Spark, Cassandra & Hadoop](https://docs.google.com/presentation/d/1j6clObu-HmqIfid-RrZTC-pRAZvhd7QXB4NmWbRfTC0/edit?usp=sharing)
+--- Notes on managing the environment.

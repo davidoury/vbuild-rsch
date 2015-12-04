@@ -44,7 +44,6 @@ ACCT
 
     vb.gui = false # No VirtualBox GUI
  
-    vb.memory = "2048" # 4GB memory
   end
 end
 
