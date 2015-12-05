@@ -6,7 +6,7 @@ Table of contents:
 
 - [Introduction](#introduction)
 - [Memory settings and requirements](#memory-settings-and-requirements)
-- [Download and install programs]*(#download-and-install-programs)
+- [Downloads, installs and settings](#downloads-installs-and-settings)
 - [Create the cluster](#create-the-cluster)
 - [Cluster management](#cluster-management)
     - [From the virtual build machine](#from-the-virtual-build-machine)
@@ -107,7 +107,7 @@ To modify these memory settings after you have created your virtual boxes:
   - Then change the `Base Memory` settings
   - `vagrant up virtualbox11` from your shell
     
-## Download and install programs
+## Downloads, installs and settings
 
 First, download and install the following three programs for Windows and the first two for Mac. 
 
@@ -115,6 +115,12 @@ First, download and install the following three programs for Windows and the fir
 1. Vagrant https://www.vagrantup.com/downloads.html
 1. GitHub Desktop (Windows only) https://desktop.github.com. 
    After installation the application will start. Exit the application. 
+   
+For Windows computers turn on _virtualization_ in the BIOS.
+
+- Look for _VT-x_ when using Intel 
+- Look for _AMD-V_ when using AMD
+
 
 ## Create the cluster
 
