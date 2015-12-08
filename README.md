@@ -17,6 +17,7 @@ Table of contents:
     - [Scala Spark shell](#scala-spark-shell)
     - [Python Spark shell](#python-spark-shell)
 - [Slides](#slides)
+- [To do](#to-do)
     
 ## Introduction 
 
@@ -560,3 +561,8 @@ The information there is being migrated here.
 
 - [Managing the Environment: R, Spark, Cassandra & Hadoop](https://docs.google.com/presentation/d/1j6clObu-HmqIfid-RrZTC-pRAZvhd7QXB4NmWbRfTC0/edit?usp=sharing)
 --- Notes on managing the environment.
+
+## To do
+
+- Creation of /etc/profile.d/local.sh needs to be fixed so that when 3-setup.yaml 
+  is rerun with a new SPARK_HOME then the variable is _updated_ 
