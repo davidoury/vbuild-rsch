@@ -1,6 +1,6 @@
 # Virtual R, Spark, Cassandra and HDFS 
 
-Vagrant, Virtualbox and Ansible are used to create a virtualbox which runs R, Spark, Cassandra and HDFS.
+Vagrant, Virtualbox and Ansi ble are used to create a virtualbox which runs R, Spark, Cassandra and HDFS.
 
 Table of contents: 
 
