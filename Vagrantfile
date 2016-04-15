@@ -13,37 +13,48 @@ ACCT
   config.vm.define "virtualbuild" do |virtualbuild|
     virtualbuild.vm.network "private_network", ip: "10.0.0.100"
     virtualbuild.vm.hostname = "virtualbuild"
-    config.vm.provider :virtualbox do |vb|
+    config.vm.provider :virtualbuild do |vb|
       vb.customize ["modifyvm", :id, "--memory", "512"]
     end
+    virtualbuild.vm.provision "shell", inline: <<-VBSH
+      cd /tmp
+      tar xvzf /vagrant/setup.tgz 
+      /tmp/install.sh
+VBSH
   end
 
-  config.vm.define "virtualbox1" do |virtualbox1|
-    virtualbox1.vm.network "private_network", ip: "10.0.0.101"
-    virtualbox1.vm.hostname = "virtualbox1"
-    config.vm.provider :virtualbox do |vb|
-        vb.customize ["modifyvm", :id, "--memory", "4096"]
+  config.vm.define "box1" do |box1|
+    box1.vm.network "private_network", ip: "10.0.0.101"
+    box1.vm.hostname = "box1"
+		config.vm.provider "virtualbox" do |v|
+  		v.memory = 3072
+  		v.cpus = 2
+		end
+    box1.vm.network "forwarded_port", guest: 8787,  host: 8787
+    box1.vm.network "forwarded_port", guest: 50070, host: 50070
+    box1.vm.network "forwarded_port", guest: 8080,  host: 6060
+    box1.vm.network "forwarded_port", guest: 8081,  host: 6061
+    box1.vm.network "forwarded_port", guest: 5050,  host: 5050
+  end
+
+ config.vm.define "box2" do |box2|
+   box2.vm.network "private_network", ip: "10.0.0.102"
+   box2.vm.hostname = "box2"
+    config.vm.provider :box do |vb|
+      vb.customize ["modifyvm", :id, "--memory", "1500"]
     end
-    virtualbox1.vm.network "forwarded_port", guest: 8787,  host:  8787
-    virtualbox1.vm.network "forwarded_port", guest: 50070, host: 50070
-    virtualbox1.vm.network "forwarded_port", guest: 8080,  host: 18080
-    virtualbox1.vm.network "forwarded_port", guest: 8081,  host: 18081
-  end
+ end
 
-# config.vm.define "virtualbox2" do |virtualbox2|
-#   virtualbox2.vm.network "private_network", ip: "10.0.0.102"
-#   virtualbox2.vm.hostname = "virtualbox2"
-# end
+ config.vm.define "box3" do |box3|
+   box3.vm.network "private_network", ip: "10.0.0.103"
+   box3.vm.hostname = "box3"
+   config.vm.provider :box do |vb|
+     vb.customize ["modifyvm", :id, "--memory", "1500"]
+   end
+ end
 
-# config.vm.define "virtualbox3" do |virtualbox3|
-#   virtualbox3.vm.network "private_network", ip: "10.0.0.103"
-#   virtualbox3.vm.hostname = "virtualbox3"
-# end
-
-  config.vm.provider "virtualbox" do |vb|
-
+  config.vm.provider "box" do |vb|
     vb.gui = false # No VirtualBox GUI
- 
   end
 end
 
