@@ -39,7 +39,7 @@
     - setup_basics
 
   - name: distribute authorization keys for root (localhost)
-    shell: "ssh-copy-id -i /{{user}}/.ssh/id_rsa {{user}}@{{item}}"
+    shell: "ssh-copy-id -i ~/ssh/id_rsa {{user}}@{{item}}"
     with_items: groups['cluster_hosts']
     when: user == "root"
     tags: 
@@ -47,7 +47,7 @@
     - setup_basics
 
   - name: distribute authorization keys for non-root users (localhost)
-    shell: "ssh-copy-id -i /home/{{user}}/.ssh/id_rsa {{user}}@{{item}}"
+    shell: "ssh-copy-id -i ~/.ssh/id_rsa {{user}}@{{item}}"
     with_items: groups['cluster_hosts']
     when: user != "root"
     tags: 
@@ -79,12 +79,7 @@
 
   # section: setup_repos
   #
-# - name: install createrepo via yum (localhost)
-#   yum: name=createrepo
-#   tags: 
-#   - setup_repos
-#   - setup_basics
-
+  
 # - name: copy files from /vagrant/dse-rpm/ to /opt/dse-repo/ (localhost)
 #   copy: src=/vagrant/dse-rpm/
 #         dest=/opt/dse-repo/
