@@ -154,7 +154,6 @@
         --output-document={{rstudio_server_rpm}}
       chdir={{download_dir}}
     tags: 
-    tags: 
     - get_rstudio
     - setup_basics
 
